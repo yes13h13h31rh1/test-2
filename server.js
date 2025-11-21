@@ -2,13 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 const path = require('path');
-// Use puppeteer-core for better compatibility on cloud platforms
-let puppeteer;
-try {
-  puppeteer = require('puppeteer-core');
-} catch (e) {
-  puppeteer = require('puppeteer');
-}
+const chromium = require('@sparticuz/chromium');
+const puppeteer = require('puppeteer-core');
 const multer = require('multer');
 const fs = require('fs');
 
@@ -45,66 +40,19 @@ async function initBrowser() {
   if (browser) return browser;
   
   try {
-    // Optimize for cloud platforms like Render
     const launchOptions = {
-      headless: 'new',
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-accelerated-2d-canvas',
-        '--disable-gpu',
-        '--disable-software-rasterizer',
-        '--disable-extensions',
-        '--single-process'
-      ]
+      headless: chromium.headless,
+      args: chromium.args,
+      executablePath: await chromium.executablePath(),
+      defaultViewport: chromium.defaultViewport
     };
-
-    // Try to use system Chrome on Render
-    if (process.env.RENDER || process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD) {
-      // On Render, try to find Chrome in common locations
-      const chromePaths = [
-        '/usr/bin/google-chrome',
-        '/usr/bin/chromium-browser',
-        '/usr/bin/chromium',
-        '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
-      ];
-      
-      for (const chromePath of chromePaths) {
-        try {
-          const fs = require('fs');
-          if (fs.existsSync(chromePath)) {
-            launchOptions.executablePath = chromePath;
-            console.log(`✅ Using system Chrome at: ${chromePath}`);
-            break;
-          }
-        } catch (e) {
-          // Continue to next path
-        }
-      }
-    }
 
     browser = await puppeteer.launch(launchOptions);
     console.log('✅ Browser initialized');
     return browser;
   } catch (error) {
     console.error('❌ Failed to initialize browser:', error.message);
-    // Fallback: try with default puppeteer (will download Chromium)
-    try {
-      const puppeteerFull = require('puppeteer');
-      browser = await puppeteerFull.launch({
-        headless: 'new',
-        args: [
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--disable-dev-shm-usage'
-        ]
-      });
-      console.log('✅ Browser initialized (fallback)');
-      return browser;
-    } catch (fallbackError) {
-      throw new Error(`Browser initialization failed: ${error.message}`);
-    }
+    throw error;
   }
 }
 
