@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Game Analytics Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮 Roblox Game Analytics</h1>
+            <div class="status-indicator">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="statusText">Connecting...</span>
+            </div>
+        </header>
+
+        <div class="last-update" id="lastUpdate">
+            Last updated: Never
+        </div>
+
+        <div class="metrics-grid">
+            <!-- Revenue Card -->
+            <div class="metric-card revenue-card">
+                <div class="card-header">
+                    <h2>💰 Revenue</h2>
+                    <span class="card-icon">💵</span>
+                </div>
+                <div class="metric-value" id="revenueRobux">0</div>
+                <div class="metric-label">Robux</div>
+                <div class="metric-subvalue" id="revenueUSD">$0.00 USD</div>
+                <div class="metric-change" id="revenueChange"></div>
+            </div>
+
+            <!-- Players Card -->
+            <div class="metric-card players-card">
+                <div class="card-header">
+                    <h2>👥 Players</h2>
+                    <span class="card-icon">🎯</span>
+                </div>
+                <div class="metric-value" id="playersCount">0</div>
+                <div class="metric-label">Currently Playing</div>
+                <div class="metric-change" id="playersChange"></div>
+            </div>
+
+            <!-- Visits Card -->
+            <div class="metric-card visits-card">
+                <div class="card-header">
+                    <h2>👁️ Visits</h2>
+                    <span class="card-icon">📊</span>
+                </div>
+                <div class="metric-value" id="visitsCount">0</div>
+                <div class="metric-label">Total Visits</div>
+                <div class="metric-change" id="visitsChange"></div>
+            </div>
+
+            <!-- Favorites Card -->
+            <div class="metric-card favorites-card">
+                <div class="card-header">
+                    <h2>⭐ Favorites</h2>
+                    <span class="card-icon">❤️</span>
+                </div>
+                <div class="metric-value" id="favoritesCount">0</div>
+                <div class="metric-label">Total Favorites</div>
+                <div class="metric-change" id="favoritesChange"></div>
+            </div>
+        </div>
+
+        <!-- Error/Info Banner -->
+        <div class="info-banner" id="infoBanner" style="display: none;">
+            <span id="infoText"></span>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="chart-section">
+            <h2>📈 Analytics Timeline</h2>
+            <div class="chart-placeholder" id="chartContainer">
+                <p>Chart visualization coming soon...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
