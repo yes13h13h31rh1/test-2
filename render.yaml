@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: roblox-analytics-dashboard
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      # Add these in Render dashboard:
+      # - UNIVERSE_ID
+      # - ROBLOX_COOKIE
+
