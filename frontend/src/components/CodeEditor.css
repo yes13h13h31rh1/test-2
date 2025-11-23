@@ -1,0 +1,11 @@
+.code-editor {
+  flex: 1;
+  overflow: auto;
+  border-radius: 8px;
+  background: #1e1e1e;
+}
+
+.code-editor pre {
+  margin: 0 !important;
+  height: 100%;
+}

@@ -1,0 +1,46 @@
+services:
+  # Backend API Service (serves frontend + integrated ML service)
+  - type: web
+    name: uefn-backend
+    env: node
+    region: oregon
+    plan: starter
+    rootDir: .
+    buildCommand: |
+      cd backend && npm install && npm run build && 
+      cd ../frontend && npm install && npm run build &&
+      cd ../ml-service && pip install -r requirements.txt
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # PORT is automatically set by Render
+      - key: DATABASE_URL
+        value: ./data/uefn_generator.db
+      # ML service is integrated (runs as subprocess), no separate service needed
+      # Leave ML_SERVICE_URL unset to use integrated service
+      # Or set ML_SERVICE_URL to use external ML service
+      - key: ML_SERVICE_PORT
+        value: "8001"
+      - key: PYTHON_PATH
+        value: python3
+      # Frontend is served from backend, no separate service needed
+      - key: FRONTEND_URL
+        value: ${HOST}
+      - key: SESSION_SECRET
+        generateValue: true
+
+  # Frontend is now served from backend (commented out - not needed)
+  # - type: static
+  #   name: uefn-frontend
+  #   region: oregon
+  #   rootDir: frontend
+  #   buildCommand: npm install && npm run build
+  #   staticPublishPath: ./dist
+  #   envVars:
+  #     - key: VITE_API_URL
+  #       fromService:
+  #         name: uefn-backend
+  #         type: web
+  #         property: host
+  #         format: https://${host}
