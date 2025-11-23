@@ -79,6 +79,20 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', service: 'backend' });
 });
 
+// Root route - helpful message
+app.get('/', (req, res) => {
+  res.json({
+    message: 'UEFN AI Generator API',
+    status: 'running',
+    endpoints: {
+      health: '/health',
+      api: '/api',
+      docs: 'This is the backend API server. Access the frontend at your frontend URL.'
+    },
+    frontendUrl: process.env.FRONTEND_URL || 'Not configured'
+  });
+});
+
 // Start server
 const HOST = process.env.HOST || '0.0.0.0';
 app.listen(PORT, HOST, () => {
